@@ -1,0 +1,56 @@
+# ============================================
+# MEETING ROOM SYSTEM - COMPLETE TEST COMMANDS
+# ============================================
+
+# 1. TEST SERVER CONNECTION
+Invoke-RestMethod -Uri http://localhost:3000/
+
+# 2. CREATE USERS
+$body = @{name="John Doe"; email="john.doe@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Jane Smith"; email="jane.smith@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Sarah Johnson"; email="sarah.j@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Michael Brown"; email="michael.b@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Emily Davis"; email="emily.d@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Admin User"; email="admin@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+
+# 3. CREATE ROOMS
+$body = @{name="Grand Conference Hall"; capacity=50; equipment=@("projector","whiteboard","sound system","video conferencing")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Executive Boardroom"; capacity=12; equipment=@("projector","whiteboard","TV")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Team Pod A"; capacity=4; equipment=@("TV")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Training Center"; capacity=20; equipment=@("projector","whiteboard","smart board")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Innovation Lab"; capacity=8; equipment=@("TV","whiteboard","video conferencing")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Client Meeting Room"; capacity=6; equipment=@("projector","video conferencing")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Quiet Study Room"; capacity=2; equipment=@("whiteboard")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Podcast Studio"; capacity=3; equipment=@("sound system","video conferencing")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+
+# 4. LIST ALL ROOMS
+Invoke-RestMethod -Uri http://localhost:3000/api/rooms
+
+# 5. LIST ROOMS WITH FILTERS
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?capacity=10"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?capacity=5"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?equipment=projector"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?equipment=TV"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?equipment=whiteboard"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?capacity=10&equipment=projector"
+
+# 6. PAGINATION EXAMPLES
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?limit=2&offset=0"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?limit=2&offset=2"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?limit=2&offset=4"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?limit=5&offset=0"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?limit=3&offset=0"
+
+# 7. COMBINED FILTERS WITH PAGINATION
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?capacity=15&limit=3&offset=0"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?equipment=projector&limit=2&offset=0"
+Invoke-RestMethod -Uri "http://localhost:3000/api/rooms?capacity=5&equipment=TV&limit=3&offset=0"
+
+# 8. TEST VALIDATION ERRORS
+$body = @{name="Jo"; email="not-an-email"; password="123"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Duplicate User"; email="john.doe@example.com"; password="123456"} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/users -Method Post -ContentType "application/json" -Body $body
+$body = @{name="Invalid Room"; capacity=-5; equipment=@("TV")} | ConvertTo-Json; Invoke-RestMethod -Uri http://localhost:3000/api/rooms -Method Post -ContentType "application/json" -Body $body
+
+Write-Host "============================================"
+Write-Host "All commands executed!" -ForegroundColor Green
+Write-Host "============================================"
