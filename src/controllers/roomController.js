@@ -1,6 +1,7 @@
 const { addRoom, getRooms } = require('../services/roomService');
 const { roomSchema } = require('../validators/roomValidator');
 
+//follows the same pattern as register rooms
 const createRoom = async (req, res, next) => {
   try {
     const validatedData = roomSchema.parse(req.body);
@@ -26,6 +27,9 @@ const createRoom = async (req, res, next) => {
   }
 };
 
+//extracts query parameters (capacity, equipment, limit, offset). 
+//It passes them to the service and then formats the response with pagination metadata.
+//Note that capacity and equipment are optional filters.
 const listRooms = async (req, res, next) => {
   try {
     const { capacity, equipment, limit, offset } = req.query;
