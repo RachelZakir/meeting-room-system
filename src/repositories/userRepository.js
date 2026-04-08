@@ -8,14 +8,14 @@ const createUser = async (userData) => {
       name: true,
       email: true,
       role: true,
-      createdAt: true
-    }
+      createdAt: true,
+    },
   });
 };
 
 const findUserByEmail = async (email) => {
   return await prisma.user.findUnique({
-    where: { email }
+    where: { email },
   });
 };
 

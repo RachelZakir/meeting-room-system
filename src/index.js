@@ -1,35 +1,40 @@
-const express = require('express');
-const dotenv = require('dotenv');
+// Import packages express, dotenv, cors and morgan
+const express = require('express'); // create z server and api
+const dotenv = require('dotenv'); // loads my.env variables
 const cors = require('cors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
-dotenv.config();
-
+dotenv.config(); // load my env variables read my env file
+//import my route and middleware
 const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const errorHandler = require('./middlewares/errorHandler');
+const authRoutes = require('./routes/authRoutes');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const app = express(); // create my express app
+const PORT = process.env.PORT || 3000; // Set port
 
 // Middleware
-app.use(cors());
-app.use(express.json());
-app.use(morgan('dev'));
+app.use(cors()); //Allows frontend to access backend
+app.use(express.json()); //Allows server to read JSON data
+app.use(morgan('dev')); // log all requests
+app.use(cookieParser());
 
-// Routes
+// Routes its the end-point/homepage for apis
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Meeting Room Management API',
     version: '1.0.0',
     endpoints: {
       users: 'POST /api/users - Register user',
       rooms: 'GET /api/rooms - List rooms',
-      rooms_create: 'POST /api/rooms - Create room'
-    }
+      rooms_create: 'POST /api/rooms - Create room',
+    },
   });
 });
 
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', roomRoutes);
 

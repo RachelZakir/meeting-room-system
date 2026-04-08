@@ -2,14 +2,14 @@ const { PrismaClient } = require('@prisma/client');
 const { PrismaPg } = require('@prisma/adapter-pg');
 const { Pool } = require('pg');
 
-// Create a PostgreSQL connection pool with explicit parameters 
+// Create a PostgreSQL connection pool with explicit parameters
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  ssl: process.env.DB_SSL === 'true',
+  host: 'localhost',
+  port: 5432,
+  database: 'meeting_room_db',
+  user: 'postgres',
+  password: 'R@123456789', // This is a string, so why error?
+  ssl: false,
 });
 
 // adapter that lets Prisma use the pg pool instead of its own connection.

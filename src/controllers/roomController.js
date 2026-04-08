@@ -6,35 +6,35 @@ const createRoom = async (req, res, next) => {
   try {
     const validatedData = roomSchema.parse(req.body);
     const room = await addRoom(validatedData);
-    
+
     res.status(201).json({
       success: true,
       message: 'Room created successfully',
-      data: room
+      data: room,
     });
   } catch (error) {
     if (error.name === 'ZodError') {
       return res.status(400).json({
         success: false,
         message: 'Validation error',
-        errors: error.errors.map(e => ({
+        errors: error.errors.map((e) => ({
           field: e.path.join('.'),
-          message: e.message
-        }))
+          message: e.message,
+        })),
       });
     }
     next(error);
   }
 };
 
-//extracts query parameters (capacity, equipment, limit, offset). 
+//extracts query parameters (capacity, equipment, limit, offset).
 //It passes them to the service and then formats the response with pagination metadata.
 //Note that capacity and equipment are optional filters.
 const listRooms = async (req, res, next) => {
   try {
     const { capacity, equipment, limit, offset } = req.query;
     const result = await getRooms({ capacity, equipment, limit, offset });
-    
+
     res.json({
       success: true,
       data: result.rooms,
@@ -42,8 +42,9 @@ const listRooms = async (req, res, next) => {
         total: result.total,
         limit: parseInt(result.limit),
         offset: parseInt(result.offset),
-        hasMore: parseInt(result.offset) + parseInt(result.limit) < result.total
-      }
+        hasMore:
+          parseInt(result.offset) + parseInt(result.limit) < result.total,
+      },
     });
   } catch (error) {
     next(error);
