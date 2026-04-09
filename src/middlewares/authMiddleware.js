@@ -18,7 +18,7 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-// Role-based access control middleware
+// Role-based access control middleware...
 const requireRole = (roles) => {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
@@ -32,4 +32,3 @@ const requireRole = (roles) => {
 };
 
 module.exports = { authMiddleware, requireRole };
-

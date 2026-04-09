@@ -51,7 +51,6 @@ const login = async (req, res, next) => {
   }
 };
 
-
 // Refresh function
 const refresh = (req, res) => {
   // my refresh func inco res and res objects
@@ -68,7 +67,6 @@ const refresh = (req, res) => {
       process.env.JWT_ACCESS_SECRET,
       { expiresIn: process.env.JWT_ACCESS_EXPIRY }
     );
-
     // update the access token cookie
     res.cookie('accessToken', newAccessToken, {
       httpOnly: true,

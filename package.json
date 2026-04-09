@@ -1,4 +1,5 @@
 {
+  
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
@@ -33,6 +34,9 @@
     "prettier": "^3.8.1"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write"]
+    "*.js": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
