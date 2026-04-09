@@ -1,5 +1,5 @@
 //imports the service function that handles registration business logic,
-// and the Zod schema for validation.
+// and the Zod schema for validation....
 const { registerUser } = require('../services/userService');
 const { userSchema } = require('../validators/userValidator');
 
