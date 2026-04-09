@@ -29,7 +29,7 @@ const createRoom = async (req, res, next) => {
 
 //extracts query parameters (capacity, equipment, limit, offset).
 //It passes them to the service and then formats the response with pagination metadata.
-//Note that capacity and equipment are optional filters.
+//Note that capacity and equipment are optional filters
 const listRooms = async (req, res, next) => {
   try {
     const { capacity, equipment, limit, offset } = req.query;
