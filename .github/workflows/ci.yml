@@ -3,9 +3,9 @@ name: CI Pipeline
 # Run this workflow on every push or pull request
 on:
   push:
-    branches: [ main, feature/* ]
+    branches: [main, feature/*]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-and-test:
