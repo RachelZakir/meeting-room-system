@@ -1,5 +1,4 @@
 const prisma = require('../config/db');
-
 const createUser = async (userData) => {
   return await prisma.user.create({
     data: userData,
@@ -19,4 +18,7 @@ const findUserByEmail = async (email) => {
   });
 };
 
-module.exports = { createUser, findUserByEmail };
+const findUserById = async (id) => {
+  return prisma.user.findUnique({ where: { id } });
+};
+module.exports = { createUser, findUserByEmail, findUserById };

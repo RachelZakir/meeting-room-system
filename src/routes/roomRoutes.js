@@ -1,7 +1,9 @@
 const express = require('express');
 const { createRoom, listRooms } = require('../controllers/roomController');
-const { authMiddleware, requireRole } = require('../middlewares/authMiddleware');
-
+const {
+  authMiddleware,
+  requireRole,
+} = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
@@ -12,4 +14,3 @@ router.get('/rooms', authMiddleware, listRooms);
 router.get('/rooms', authMiddleware, listRooms);
 
 module.exports = router;
-

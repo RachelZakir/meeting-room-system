@@ -1,7 +1,7 @@
 const { createRoom, findRooms } = require('../repositories/roomRepository');
 
 const addRoom = async (roomData) => {
- return await createRoom(roomData);
+  return await createRoom(roomData);
 };
 
 const getRooms = async (query) => {

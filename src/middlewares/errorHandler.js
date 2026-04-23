@@ -1,4 +1,4 @@
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   //Error-handling middleware err parameter is the key
   console.error('Error:', err.stack); //Log the error
 

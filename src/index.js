@@ -11,6 +11,8 @@ const userRoutes = require('./routes/userRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 const authRoutes = require('./routes/authRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+const adminExportRoutes = require('./routes/adminExportRoutes');
 
 const app = express(); // create my express app
 const PORT = process.env.PORT || 3000; // Set port
@@ -37,8 +39,8 @@ app.get('/', (req, res) => {
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', roomRoutes);
-
-// Error handler (must be last)
+app.use('/api', bookingRoutes);
+app.use('/api', adminExportRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
