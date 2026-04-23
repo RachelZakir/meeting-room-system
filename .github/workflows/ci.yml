@@ -1,0 +1,39 @@
+name: CI Pipeline
+
+# Run this workflow on every push or pull request
+on:
+  push:
+    branches: [ main, feature/* ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout your code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run ESLint
+      - name: Run ESLint
+        run: npm run lint
+
+      # Step 5: Check Prettier formatting
+      - name: Check Prettier formatting
+        run: npm run format:check
+
+      # Step 6: Run tests (if you have Jest/Vitest configured)
+      - name: Run tests
+        run: npm test
