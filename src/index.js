@@ -1,5 +1,6 @@
 // this is to test branching on git
 //this is to test branching on git 2nd time dear
+// now ots to check the ci and cd
 //Import packages express, dotenv, cors and morgan
 const express = require('express'); // create z server and api
 const dotenv = require('dotenv'); // loads my.env variables
