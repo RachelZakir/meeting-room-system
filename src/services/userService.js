@@ -2,6 +2,10 @@ const bcrypt = require('bcryptjs');
 const {
   createUser,
   findUserByEmail,
+  findUserById,
+  updateUser,
+  listUsers,
+  softDeleteUser,
 } = require('../repositories/userRepository');
 
 const registerUser = async (userData) => {
@@ -23,5 +27,20 @@ const registerUser = async (userData) => {
 
   return newUser;
 };
+const editUser = async (id, userData) => {
+  const user = await findUserById(id);
+  if (!user || user.isDeleted) throw new Error('User not found');
+  return updateUser(id, userData);
+};
 
-module.exports = { registerUser };
+const getUsers = async (page, limit) => {
+  return listUsers(page, limit);
+};
+
+const deleteUser = async (id) => {
+  const user = await findUserById(id);
+  if (!user || user.isDeleted) throw new Error('User not found');
+  return softDeleteUser(id);
+};
+
+module.exports = { registerUser, editUser, getUsers, deleteUser };

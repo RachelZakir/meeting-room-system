@@ -30,5 +30,44 @@ const findBookings = async (userId) => {
     orderBy: { startTime: 'asc' },
   });
 };
+const updateBooking = async (id, bookingData) => {
+  return await prisma.$transaction(async (tx) => {
+    // Check for overlap
+    const conflict = await tx.booking.findFirst({
+      where: {
+        roomId: bookingData.roomId,
+        id: { not: id },
+        AND: [
+          { startTime: { lt: bookingData.endTime } },
+          { endTime: { gt: bookingData.startTime } },
+        ],
+      },
+    });
+    if (conflict) throw new Error('Booking conflict: room already booked');
 
-module.exports = { createBooking, findBookings };
+    return await tx.booking.update({
+      where: { id },
+      data: bookingData,
+      include: { room: true },
+    });
+  });
+};
+
+const deleteBooking = async (id) => {
+  return await prisma.booking.delete({ where: { id } });
+};
+
+const findAllBookings = async () => {
+  return prisma.booking.findMany({
+    include: { room: true, user: true },
+    orderBy: { startTime: 'asc' },
+  });
+};
+
+module.exports = {
+  createBooking,
+  findBookings,
+  updateBooking,
+  deleteBooking,
+  findAllBookings,
+};

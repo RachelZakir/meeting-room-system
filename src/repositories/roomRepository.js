@@ -14,7 +14,9 @@ const createRoom = async (roomData) => {
 
 const findRooms = async (filters = {}, pagination = {}) => {
   const { capacity, equipment } = filters;
-  const { limit = 10, offset = 0 } = pagination;
+  const { offset = 0 } = pagination;
+
+  // Remove the limit default and don't apply take() if no limit specified
 
   const where = {};
 
@@ -29,7 +31,7 @@ const findRooms = async (filters = {}, pagination = {}) => {
   const rooms = await prisma.room.findMany({
     where,
     skip: parseInt(offset),
-    take: parseInt(limit),
+    // Remove the take() to get all records
     orderBy: { createdAt: 'desc' },
   });
 
@@ -41,7 +43,26 @@ const findRooms = async (filters = {}, pagination = {}) => {
 
   const total = await prisma.room.count({ where });
 
-  return { rooms: formattedRooms, total, limit, offset };
+  return { rooms: formattedRooms, total, limit: rooms.length, offset };
+};
+const updateRoom = async (id, data) => {
+  // Convert equipment array to JSON string if needed
+  const updateData = {
+    ...data,
+    equipment: data.equipment ? JSON.stringify(data.equipment) : undefined,
+  };
+
+  return prisma.room.update({
+    where: { id },
+    data: updateData,
+  });
 };
 
-module.exports = { createRoom, findRooms };
+const softDeleteRoom = async (id) => {
+  return prisma.room.update({
+    where: { id },
+    data: { isDeleted: true },
+  });
+};
+
+module.exports = { createRoom, findRooms, updateRoom, softDeleteRoom };

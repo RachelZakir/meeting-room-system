@@ -1,8 +1,14 @@
 const { PrismaClient } = require('@prisma/client');
-const { getUserBookings } = require('../services/bookingService');
 const { findUserById } = require('../repositories/userRepository');
 const { Worker } = require('worker_threads');
 const path = require('path');
+const {
+  //addBooking,
+  getUserBookings,
+  editBooking,
+  removeBooking,
+  getAllBookings,
+} = require('../services/bookingService');
 
 const prisma = new PrismaClient();
 
@@ -35,7 +41,6 @@ const createBooking = async (req, res) => {
 
   try {
     const booking = await prisma.$transaction(async (tx) => {
-      // Step 1: Check for conflicts inside the transaction
       const conflict = await tx.booking.findFirst({
         where: {
           roomId,
@@ -48,7 +53,6 @@ const createBooking = async (req, res) => {
         throw new Error('Room already booked in this time slot');
       }
 
-      // Step 2: Create booking if no conflict
       return await tx.booking.create({
         data: {
           userId: req.user.id,
@@ -56,14 +60,12 @@ const createBooking = async (req, res) => {
           startTime: new Date(startTime),
           endTime: new Date(endTime),
         },
-        include: { room: true }, // include room relation for PDF
+        include: { room: true },
       });
     });
 
-    // Fetch user info for PDF
     const user = await findUserById(req.user.id);
 
-    // Generate PDF
     const filePath = await generateBookingPdf({
       id: booking.id,
       userName: user?.name || 'Unknown',
@@ -79,16 +81,49 @@ const createBooking = async (req, res) => {
       pdf: filePath,
     });
   } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err.message,
-    });
+    res.status(400).json({ success: false, message: err.message });
   }
 };
 
 const listBookings = async (req, res) => {
+  if (req.user.role === 'ADMIN') {
+    const bookings = await getAllBookings();
+    return res.json({ success: true, data: bookings });
+  }
   const bookings = await getUserBookings(req.user.id);
   res.json({ success: true, data: bookings });
 };
 
-module.exports = { createBooking, listBookings };
+const updateBooking = async (req, res) => {
+  try {
+    const booking = await editBooking(
+      req.params.id,
+      req.body,
+      req.user.id,
+      req.user.role
+    );
+    res.json({ success: true, message: 'Booking updated', data: booking });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+const deleteBooking = async (req, res) => {
+  try {
+    const booking = await removeBooking(
+      req.params.id,
+      req.user.id,
+      req.user.role
+    );
+    res.json({ success: true, message: 'Booking deleted', data: booking });
+  } catch (err) {
+    res.status(400).json({ success: false, message: err.message });
+  }
+};
+
+module.exports = {
+  createBooking,
+  listBookings,
+  updateBooking,
+  deleteBooking,
+};

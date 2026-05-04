@@ -21,7 +21,12 @@ const app = express(); // create my express app
 const PORT = process.env.PORT || 3000; // Set port
 
 // Middleware
-app.use(cors()); //Allows frontend to access backend
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // your Next.js frontend
+    credentials: true, // allow cookies/sessions
+  })
+); //Allows frontend to access backend
 app.use(express.json()); //Allows server to read JSON data
 app.use(morgan('dev')); // log all requests
 app.use(cookieParser());

@@ -1,16 +1,21 @@
-// hello this is to ckech branching
-const { findBookings } = require('../repositories/bookingRepository');
-const prisma = require('../config/db');
+const {
+  createBooking,
+  findBookings,
+  updateBooking,
+  deleteBooking,
+  findAllBookings,
+} = require('../repositories/bookingRepository');
 
-const addBooking = async ({ userId, roomId, startTime, endTime }) => {
-  return prisma.booking.create({
-    data: { userId, roomId, startTime, endTime },
-    include: { room: true },
-  });
+const addBooking = async (data) => createBooking(data);
+const getUserBookings = async (userId) => findBookings(userId);
+const editBooking = async (id, data) => updateBooking(id, data);
+const removeBooking = async (id) => deleteBooking(id);
+const getAllBookings = async () => findAllBookings();
+
+module.exports = {
+  addBooking,
+  getUserBookings,
+  editBooking,
+  removeBooking,
+  getAllBookings,
 };
-
-const getUserBookings = async (userId) => {
-  return await findBookings(userId);
-};
-
-module.exports = { addBooking, getUserBookings };

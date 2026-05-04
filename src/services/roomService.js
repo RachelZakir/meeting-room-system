@@ -1,4 +1,9 @@
-const { createRoom, findRooms } = require('../repositories/roomRepository');
+const {
+  createRoom,
+  findRooms,
+  updateRoom,
+  softDeleteRoom,
+} = require('../repositories/roomRepository');
 
 const addRoom = async (roomData) => {
   return await createRoom(roomData);
@@ -12,4 +17,12 @@ const getRooms = async (query) => {
   return await findRooms(filters, pagination);
 };
 
-module.exports = { addRoom, getRooms };
+const editRoom = async (id, data) => {
+  return await updateRoom(id, data);
+};
+
+const deleteRoom = async (id) => {
+  return await softDeleteRoom(id);
+};
+
+module.exports = { addRoom, getRooms, editRoom, deleteRoom };

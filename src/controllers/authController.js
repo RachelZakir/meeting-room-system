@@ -44,13 +44,21 @@ const login = async (req, res) => {
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
+  // IMPORTANT: Include user information in the response
   res.json({
     success: true,
     message: 'Login successful',
-    accessToken, // <-- include access token in response
-    refreshToken, // <-- include refresh token in response
+    accessToken,
+    refreshToken,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
   });
 };
+
 const refresh = (req, res) => {
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) {
@@ -68,7 +76,7 @@ const refresh = (req, res) => {
 
   res.cookie('accessToken', newAccessToken, {
     httpOnly: true,
-    secure: true,
+    secure: false,
     sameSite: 'strict',
     maxAge: 15 * 60 * 1000,
   });

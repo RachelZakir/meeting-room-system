@@ -18,17 +18,21 @@ model User {
   bookings  Booking[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDeleted Boolean  @default(false) // soft delete flag
 }
 
+
 model Room {
-  id         String   @id @default(cuid())
-  name       String
-  capacity   Int
-  equipment  String?
-  bookings   Booking[]
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  capacity  Int
+  equipment String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookings  Booking[]
+  isDeleted Boolean  @default(false)   // <-- add this line
 }
+
 
 model Booking {
   id         String   @id @default(cuid())

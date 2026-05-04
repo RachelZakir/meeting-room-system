@@ -1,4 +1,9 @@
-const { addRoom, getRooms } = require('../services/roomService');
+const {
+  addRoom,
+  getRooms,
+  editRoom,
+  deleteRoom,
+} = require('../services/roomService');
 const { roomSchema } = require('../validators/roomValidator');
 
 const createRoom = async (req, res) => {
@@ -28,4 +33,15 @@ const listRooms = async (req, res) => {
   });
 };
 
-module.exports = { createRoom, listRooms };
+const updateRoom = async (req, res) => {
+  const validatedData = roomSchema.partial().parse(req.body); // allow partial updates
+  const room = await editRoom(req.params.id, validatedData);
+  res.json({ success: true, message: 'Room updated successfully', data: room });
+};
+
+const removeRoom = async (req, res) => {
+  const room = await deleteRoom(req.params.id);
+  res.json({ success: true, message: 'Room deleted (soft)', data: room });
+};
+
+module.exports = { createRoom, listRooms, updateRoom, removeRoom };

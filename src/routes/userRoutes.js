@@ -1,8 +1,25 @@
 const express = require('express');
-const { register } = require('../controllers/userController'); //load fun from z controllerfile
+const {
+  register,
+  update,
+  list,
+  remove,
+  getUserById,
+} = require('../controllers/userController');
 
-const router = express.Router(); // create route instance
+const {
+  authMiddleware,
+  requireRole,
+} = require('../middlewares/authMiddleware');
 
-router.post('/users', register); //Define a POST route
+const router = express.Router();
+
+router.post('/users', register);
+
+router.put('/users/:id', authMiddleware, update);
+router.get('/users/:id', authMiddleware, getUserById);
+router.get('/users', authMiddleware, requireRole(['ADMIN']), list);
+
+router.delete('/users/:id', authMiddleware, requireRole(['ADMIN']), remove);
 
 module.exports = router;
